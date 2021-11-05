@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     Button mSendButton;
     RecyclerView mMessageRecycler;
 
-    ArrayList<String> messages = new ArrayList<>();
+    ArrayList<Message> messages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                             "Enter a message!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                myRef.push().setValue(msg);
+                myRef.push().setValue(new Message(RegistrationPage.username, msg));
                 mEditTextMessage.setText("");
             }
         });
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String msg = snapshot.getValue(String.class);
+                Message msg = snapshot.getValue(Message.class);
                 messages.add(msg);
                 dataAdapter.notifyDataSetChanged();
                 mMessageRecycler.smoothScrollToPosition(messages.size() - 1);
