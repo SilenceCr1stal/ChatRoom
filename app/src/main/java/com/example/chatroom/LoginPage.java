@@ -1,5 +1,7 @@
 package com.example.chatroom;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,8 +12,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+
+import java.util.ArrayList;
 
 public class LoginPage extends AppCompatActivity {
+    static ArrayList<User> listUsers = new ArrayList<>();
+    public static String loginUser = "unknown2";
     private EditText user_email, pass_word;
     FirebaseAuth mAuth;
 
@@ -45,15 +54,19 @@ public class LoginPage extends AppCompatActivity {
                 pass_word.requestFocus();
                 return;
             }
-            if(password.length()<6)
-            {
-                pass_word.setError("Length of password is more than 6");
-                pass_word.requestFocus();
-                return;
+            if (RegistrationPage.username.equals("unknown")) {
+                for (int i = 0; i < listUsers.size(); i++) {
+                    if (listUsers.get(i).email.equals(email)) {
+                        loginUser = listUsers.get(i).username;
+                    }
+                }
+            } else {
+                loginUser = RegistrationPage.username;
             }
             mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
                 if(task.isSuccessful())
                 {
+
                     startActivity(new Intent(LoginPage.this, MainActivity.class));
                 }
                 else
@@ -65,6 +78,34 @@ public class LoginPage extends AppCompatActivity {
 
             });
         });
+        RegistrationPage.myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User user = snapshot.getValue(User.class);
+                LoginPage.listUsers.add(user);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         btn_sign.setOnClickListener(v -> startActivity(new Intent(LoginPage.this,
                 RegistrationPage.class )));
     }

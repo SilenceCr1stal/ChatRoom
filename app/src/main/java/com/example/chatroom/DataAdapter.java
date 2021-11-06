@@ -30,7 +30,6 @@ public class DataAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        String msg = msgs.get(position);
         String msg = msgs.get(position).message;
         String username = msgs.get(position).username;
         holder.username.setText(username);

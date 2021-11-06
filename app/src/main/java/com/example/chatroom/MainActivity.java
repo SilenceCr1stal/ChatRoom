@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -22,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+//    public static String username = "unknown";
 
     private static final int MAX_LENGTH_MESSAGE = 99;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -56,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                             "Enter a message!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                myRef.push().setValue(new Message(RegistrationPage.username, msg));
+                myRef.push().setValue(new Message(LoginPage.loginUser, msg));
                 mEditTextMessage.setText("");
             }
         });

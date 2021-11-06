@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/username"
         android:textColor="#6E6E6E"
-        android:text="Daniel"
+        android:text="user"
         android:textSize="16dp"
         android:paddingLeft="6dp"
         android:layout_marginTop="8dp"/>
